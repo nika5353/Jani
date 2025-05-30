@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/registerFragment">
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.eat.jani.fragments.auth.RegisterFragment"
+        android:label="Register">
+        <action
+            android:id="@+id/action_registerFragment_to_emailVerifyFragment"
+            app:destination="@id/emailVerifyFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/emailVerifyFragment"
+        android:name="com.eat.jani.fragments.auth.VerifyFragment"
+        android:label="Verify">
+        <action
+            android:id="@+id/action_emailVerifyFragment_to_mainActivity"
+            app:destination="@id/mainActivity" />
+        <action
+            android:id="@+id/action_emailVerifyFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_emailVerifyFragment_to_loginActivity"
+            app:destination="@id/loginActivity" />
+        <action
+            android:id="@+id/action_emailVerifyFragment_to_verifySuccessFragment"
+            app:destination="@id/verifySuccessFragment" />
+    </fragment>
+
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.eat.jani.MainActivity"
+        android:label="Main" />
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="com.eat.jani.activities.auth.LoginActivity"
+        android:label="LoginActivity" />
+    <fragment
+        android:id="@+id/verifySuccessFragment"
+        android:name="com.eat.jani.fragments.auth.VerifySuccessFragment"
+        android:label="fragment_verify_success" />
+</navigation>

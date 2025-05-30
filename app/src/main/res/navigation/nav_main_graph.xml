@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.eat.jani.fragments.main.HomeFragment"
+        android:label="fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_productsFragment"
+            app:destination="@id/productsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_nav_bmi_graph"
+            app:destination="@id/nav_bmi_graph" />
+        <action
+            android:id="@+id/action_homeFragment_to_nav_note_graph"
+            app:destination="@id/nav_note_graph" />
+        <action
+            android:id="@+id/action_homeFragment_to_nav_meal_plan_graph"
+            app:destination="@id/nav_meal_plan_graph" />
+        <action
+            android:id="@+id/action_homeFragment_to_progressFragment"
+            app:destination="@id/progressFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/productsFragment"
+        android:name="com.eat.jani.fragments.main.products.ProductsFragment"
+        android:label="fragment_products" >
+        <action
+            android:id="@+id/action_productsFragment_to_singleProductFragment"
+            app:destination="@id/singleProductFragment" />
+    </fragment>
+    <include app:graph="@navigation/nav_bmi_graph" />
+    <fragment
+        android:id="@+id/singleProductFragment"
+        android:name="com.eat.jani.fragments.main.products.SingleProductFragment"
+        android:label="SingleProductFragment">
+        <argument
+            android:name="product"
+            app:argType="com.eat.jani.models.products.Product" />
+    </fragment>
+    <include app:graph="@navigation/nav_note_graph" />
+    <include app:graph="@navigation/nav_meal_plan_graph" />
+    <fragment
+        android:id="@+id/progressFragment"
+        android:name="com.eat.jani.fragments.main.ProgressFragment"
+        android:label="ProgressFragment" />
+</navigation>

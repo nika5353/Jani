@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_meal_plan_graph"
+    app:startDestination="@id/mealPlanningFragment">
+
+    <fragment
+        android:id="@+id/mealPlanningFragment"
+        android:name="com.eat.jani.fragments.main.diet.MealPlanningFragment"
+        android:label="MealPlanningFragment" >
+        <action
+            android:id="@+id/action_mealPlanningFragment_to_mealPlanningResultFragment"
+            app:destination="@id/mealPlanningResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mealPlanningResultFragment"
+        android:name="com.eat.jani.fragments.main.diet.MealPlanningResultFragment"
+        android:label="MealPlanningResultFragment" />
+</navigation>

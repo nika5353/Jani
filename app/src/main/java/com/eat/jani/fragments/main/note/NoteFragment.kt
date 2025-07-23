@@ -1,5 +1,6 @@
 package com.eat.jani.fragments.main.note
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -53,7 +54,19 @@ class NoteFragment : Fragment() {
                 findNavController().navigate(R.id.action_noteFragment_to_updateNoteFragment, bundle)
             },
             onDeleteClick = { note ->
-                viewModel.deleteNote(note.id)
+                AlertDialog.Builder(requireContext())
+                    .setTitle("წაშლა")
+                    .setMessage("დარწმუნებული ხარ, რომ გინდა წაშალო?")
+                    .setIcon(R.drawable.delete)
+                    .setPositiveButton("დიახ") { dialog, _ ->
+                        viewModel.deleteNote(note.id)
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("არა") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .setCancelable(false)
+                    .show()
             }
         )
         binding.noteRecyclerView.adapter = adapter

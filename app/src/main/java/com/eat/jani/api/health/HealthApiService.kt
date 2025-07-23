@@ -19,4 +19,8 @@ interface HealthApiService {
     suspend fun planUserDiet(@Body request: DietPlanRequest) : Response<List<DietPlanResponse>?>
     @GET("DietPlan/check-progress")
     suspend fun checkPlanProgress() : Response<List<ProgressResponse>?>
+    @GET("NotificationSender/Get-Meal-Times")
+    suspend fun getMealTimes(): Response<List<String>>
+    @POST("NotificationSender/Send-Meal-Notification")
+    suspend fun sendMealNotification(@Body token: String): Response<Unit>
 }

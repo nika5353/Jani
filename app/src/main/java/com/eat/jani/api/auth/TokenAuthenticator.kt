@@ -20,67 +20,79 @@ class TokenAuthenticator (
     override fun authenticate(route: Route?, response: Response): Request? {
         if (responseCount(response) >= 2) return null
 
-        val accessToken = JaniApp.authSharedPreferences.getString("accessToken", null)
-        val refreshToken = JaniApp.authSharedPreferences.getString("refreshToken", null)
+        val prefs = JaniApp.authSharedPreferences
+        val oldAccessToken = prefs.getString("accessToken", null)
+        val oldRefreshToken = prefs.getString("refreshToken", null)
 
-        if (accessToken.isNullOrEmpty() || refreshToken.isNullOrEmpty()) return null
+        if (oldAccessToken.isNullOrEmpty() || oldRefreshToken.isNullOrEmpty()) return null
 
-        Log.d("GENERATE_NEW_TOKENS", "access Token: $accessToken, refresh token: $refreshToken")
+        Log.d("TOKEN", "🔁 Trying to refresh tokens")
+        Log.d("TOKEN", "Old access: $oldAccessToken")
+        Log.d("TOKEN", "Old refresh: $oldRefreshToken")
 
         return try {
             val newUserInfo = runBlocking {
                 val refreshResponse = authApi.generateNewTokens(
-                    TokenRefreshRequest(accessToken, refreshToken)
+                    TokenRefreshRequest(oldAccessToken, oldRefreshToken)
                 )
                 if (refreshResponse.isSuccessful) {
-                    Log.e("GENERATE_NEW_TOKENS", "${refreshResponse.body()}")
-                    refreshResponse.body()
+                    val body = refreshResponse.body()!!
+                    Log.d("TOKEN", "✅ New tokens received: ${body.token} / ${body.refreshToken}")
+                    body
                 } else {
-                    Log.e("GENERATE_NEW_TOKENS", "Refresh Tokens Error Body: ${refreshResponse.errorBody()?.string()}")
-                    logoutUser()
+                    Log.e("TOKEN", "❌ Token refresh failed: ${refreshResponse.errorBody()?.string()}")
                     null
                 }
             }
 
-            newUserInfo?.let {
-                with(JaniApp.authSharedPreferences.edit()) {
-                    putString("accessToken", it.token)
-                    putString("refreshToken", it.refreshToken)
+            if (newUserInfo != null) {
+                // Save new tokens
+                prefs.edit().apply {
+                    putString("accessToken", newUserInfo.token)
+                    putString("refreshToken", newUserInfo.refreshToken)
                     apply()
                 }
-                Log.d("GENERATE_NEW_TOKENS", "access Token: $accessToken, refresh token: $refreshToken")
+
+                // Retry original request with new token
                 response.request.newBuilder()
-                    .header("Authorization", "Bearer ${it.token}")
+                    .header("Authorization", "Bearer ${newUserInfo.token}")
                     .build()
+            } else {
+                // If refresh failed, log user out
+                logoutUser()
+                null
             }
 
         } catch (e: Exception) {
-            Log.e("GENERATE_NEW_TOKENS", "${e.localizedMessage}")
+            Log.e("AUTH", "⚠️ Exception during token refresh: ${e.localizedMessage}")
             null
         }
     }
 
     private fun responseCount(response: Response): Int {
         var count = 1
-        var res = response
-        while (res.priorResponse != null) {
+        var current = response
+        while (current.priorResponse != null) {
             count++
-            res = res.priorResponse!!
+            current = current.priorResponse!!
         }
         return count
     }
 
     private fun logoutUser() {
-        Log.d("TOKEN_DEBUG", "Logging out user due to expired refreshToken")
+        Log.d("AUTH", "🚪 Logging out due to failed refresh token")
 
-        with(JaniApp.authSharedPreferences.edit()) {
+        // Clear shared preferences
+        JaniApp.authSharedPreferences.edit().apply {
             remove("accessToken")
             remove("refreshToken")
             apply()
         }
 
-        val intent = Intent(context, LoginActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        // Redirect to login
+        val intent = Intent(context, LoginActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
         context.startActivity(intent)
     }
 }

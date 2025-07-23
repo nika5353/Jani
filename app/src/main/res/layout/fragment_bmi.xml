@@ -129,7 +129,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text='@{String.valueOf(viewModel.height) + " cm"}'
+                    android:text='@{String.valueOf(viewModel.height) + " სმ"}'
                     android:textColor="@color/black"
                     android:textSize="32sp" />
 
@@ -166,7 +166,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="წონა (kg)"
+                    android:text="წონა (კგ)"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     tools:ignore="HardcodedText" />

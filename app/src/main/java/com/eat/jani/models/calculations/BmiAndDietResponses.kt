@@ -1,5 +1,9 @@
 package com.eat.jani.models.calculations
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import java.time.LocalTime
+
 data class HealthResponse(
     val bmi: Double,
     val maintenanceCalories: Int,
@@ -27,16 +31,19 @@ data class Meal(
     val protein: Int,
     val carbs: Int,
     val fat: Int,
-    val mealCalories: Int
+    val mealCalories: Int,
+    val time: String,
+    val label: String
 )
 
+@Parcelize
 data class ProgressResponse(
     val weekNumber: Int,
     val calories: Int,
     val proteinInGrams: Int,
     val carbsInGrams: Int,
     val fatsInGrams: Int,
-)
+) : Parcelable
 
 /*
     // Heath

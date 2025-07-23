@@ -1,10 +1,16 @@
 package com.eat.jani
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.NavHostFragment
@@ -23,12 +29,18 @@ import androidx.core.view.size
 import androidx.core.view.get
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import com.eat.jani.repositories.health.HealthRepository
+import com.eat.jani.viewmodels.NotificationViewModelFactory
+import com.eat.jani.viewmodels.notification.NotificationViewModel
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels {
         MainViewModelFactory(AuthRepository(RetrofitInstance.authApi))
+    }
+    private val notificationViewModel: NotificationViewModel by viewModels {
+        NotificationViewModelFactory(HealthRepository(RetrofitInstance.healthApi))
     }
 
     private val fragmentToMenuMap = mapOf(
@@ -46,6 +58,21 @@ class MainActivity : BaseActivity() {
         setUpListeners()
         fragmentCheck()
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            notificationViewModel.getMealTimes(applicationContext)
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    1001
+                )
+            }
+        }
     }
 
     private fun startingLogics() {
@@ -133,7 +160,8 @@ class MainActivity : BaseActivity() {
                 destination.id == R.id.singleProductFragment ||
                 destination.id == R.id.addNoteFragment ||
                 destination.id == R.id.updateNoteFragment ||
-                destination.id == R.id.mealPlanningResultFragment) {
+                destination.id == R.id.mealPlanningResultFragment ||
+                destination.id == R.id.progressFragment) {
 
                 binding.menuIcon.visibility = View.GONE
                 binding.profileImage.visibility = View.GONE

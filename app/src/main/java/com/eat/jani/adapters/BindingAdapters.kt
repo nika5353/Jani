@@ -9,7 +9,7 @@ import com.eat.jani.R
 import java.net.URLEncoder
 
 object BindingAdapters {
-    private const val baseUrl = "https://84e6-95-104-0-109.ngrok-free.app"
+    private const val baseUrl = "https://4f66-95-104-0-109.ngrok-free.app"
 
     @JvmStatic
     @BindingAdapter("imageUrl")

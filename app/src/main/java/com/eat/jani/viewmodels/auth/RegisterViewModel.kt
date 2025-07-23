@@ -101,7 +101,7 @@ class RegisterViewModel(private val repository: AuthRepository) : ViewModel() {
         viewModelScope.launch {
             try {
                 val emailRes = repository.isEmailRegistered(EmailRequest(email.value ?: ""))
-                if (emailRes.body()?.isAvailable == false) {
+                if (emailRes.body()?.status == "Failed") {
                     emailAvailability.value = false
                     emailError.value = "Email უკვე გამოყენებულია"
                 } else {
@@ -118,7 +118,7 @@ class RegisterViewModel(private val repository: AuthRepository) : ViewModel() {
         viewModelScope.launch {
             try {
                 val usernameRes = repository.isUsernameRegistered(UsernameRequest(username.value ?: ""))
-                if (usernameRes.body()?.isAvailable == false) {
+                if (usernameRes.body()?.status == "Failed") {
                     usernameAvailability.value = false
                     usernameError.value = "Username უკვე გამოყენებულია"
                 } else {

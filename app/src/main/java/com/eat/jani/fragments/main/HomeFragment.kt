@@ -1,6 +1,7 @@
 package com.eat.jani.fragments.main
 
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,11 +16,14 @@ import com.eat.jani.R
 import com.eat.jani.adapters.main.HomeCardAdapter
 import com.eat.jani.api.RetrofitInstance
 import com.eat.jani.databinding.FragmentHomeBinding
+import com.eat.jani.models.calculations.ProgressResponse
+import com.eat.jani.models.products.Product
 import com.eat.jani.repositories.health.HealthRepository
 import com.eat.jani.viewmodels.MealPlanningViewModelFactory
 import com.eat.jani.viewmodels.main.HomeViewModel
 import com.eat.jani.viewmodels.main.MealPlanningViewModel
 import com.google.android.material.navigation.NavigationView
+import java.util.ArrayList
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
@@ -28,6 +32,7 @@ class HomeFragment : Fragment() {
     private val mealPlanningViewModel: MealPlanningViewModel by viewModels {
         MealPlanningViewModelFactory(HealthRepository(RetrofitInstance.healthApi))
     }
+    private var bundle: Bundle? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +43,7 @@ class HomeFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         mealPlanningViewModel.getInfo()
+        mealPlanningViewModel.getProgressInfo()
         observeCards()
         setUpListeners()
 
@@ -56,13 +62,16 @@ class HomeFragment : Fragment() {
             }
             binding.cardRecyclerView.adapter = adapter
         })
-        /*mealPlanningViewModel.progressResponse.observe(viewLifecycleOwner) {
-            if(!it.isNullOrEmpty()) {
+        mealPlanningViewModel.progressResponse.observe(viewLifecycleOwner) { response ->
+            if (!response.isNullOrEmpty()) {
                 binding.navigateToProgressBtn.visibility = View.VISIBLE
+                bundle = Bundle().apply {
+                    putParcelableArrayList("plan", ArrayList(response))
+                }
             } else {
                 binding.navigateToProgressBtn.visibility = View.GONE
             }
-        }*/
+        }
     }
 
     private fun navigateTo(fragmentId: Int, menuItemId: Int? = null) {
@@ -76,7 +85,9 @@ class HomeFragment : Fragment() {
 
     private fun setUpListeners() {
         binding.navigateToProgressBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_progressFragment)
+            bundle?.let {
+                findNavController().navigate(R.id.action_homeFragment_to_progressFragment, it)
+            }
         }
     }
 }

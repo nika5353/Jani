@@ -24,4 +24,12 @@ class HealthRepository(private val api: HealthApiService) {
     suspend fun checkPlanProgress() : Response<List<ProgressResponse>?> {
         return api.checkPlanProgress()
     }
+
+    suspend fun getMealTimes(): Response<List<String>> {
+        return api.getMealTimes()
+    }
+
+    suspend fun sendMealNotification(token: String): Response<Unit> {
+        return api.sendMealNotification(token)
+    }
 }

@@ -11,6 +11,7 @@ import com.eat.jani.viewmodels.auth.RegisterViewModel
 import com.eat.jani.viewmodels.main.HealthViewModel
 import com.eat.jani.viewmodels.main.MealPlanningViewModel
 import com.eat.jani.viewmodels.note.NoteViewModel
+import com.eat.jani.viewmodels.notification.NotificationViewModel
 import com.eat.jani.viewmodels.products.ProductsViewModel
 
 class RegisterViewModelFactory(private val repository: AuthRepository) : ViewModelProvider.Factory {
@@ -78,6 +79,16 @@ class NoteViewModelFactory(private val repository: NoteRepository) : ViewModelPr
         if (modelClass.isAssignableFrom(NoteViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return NoteViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
+
+class NotificationViewModelFactory(private val repository: HealthRepository) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(NotificationViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return NotificationViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

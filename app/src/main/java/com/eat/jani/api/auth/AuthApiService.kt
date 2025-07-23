@@ -49,6 +49,6 @@ interface AuthApiService {
     @POST("Authentication/logout")
     suspend fun logout(): Response<Unit>
 
-    @GET("Home")
+    @GET("Home/user")
     suspend fun getUser() : Response<UserResponce>
 }

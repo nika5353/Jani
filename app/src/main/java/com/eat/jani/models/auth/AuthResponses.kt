@@ -1,7 +1,9 @@
 package com.eat.jani.models.auth
 
+import com.google.gson.annotations.SerializedName
+
 data class IsAvailableResponce(
-    val isAvailable: Boolean,
+    val status: String,
     val message: String
 )
 

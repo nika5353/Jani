@@ -95,8 +95,6 @@ class HealthViewModel(private val repository: HealthRepository) : ViewModel() {
         }
     }
 
-
-
     fun increaseWeight() {
         val current = BigDecimal(weight.value ?: "0.0")
         if (current > BigDecimal(199.9)) {

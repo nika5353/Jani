@@ -45,11 +45,11 @@ class BmiFragment : Fragment() {
     private var increaseJob: Job? = null
     private var decreaseJob: Job? = null
     // Args
-    private var waist: String? = null
+    /*private var waist: String? = null
     private var neck: String? = null
     private var hips: String? = null
     private var averageSteps: String? = null
-    private var success: Boolean? = null
+    private var success: Boolean? = null*/
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,7 +59,7 @@ class BmiFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        waist = arguments?.getString("waist")
+        /*waist = arguments?.getString("waist")
         neck = arguments?.getString("neck")
         hips = arguments?.getString("hips")
         averageSteps = arguments?.getString("avarageSteps")
@@ -72,7 +72,7 @@ class BmiFragment : Fragment() {
             viewModel.hips.value = hips!!.toInt()
             viewModel.averageStepsPerDay.value = averageSteps
             viewModel.successfulResponse.value = success
-        }
+        }*/
 
         setupSpinner()
         setUpObservers()

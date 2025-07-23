@@ -79,7 +79,7 @@ class BmiAdditionalFragment : Fragment() {
                 viewModel.stepsError.value = "შეიყვანე 0-დან 50000-ის ჩათვლით"
             } else {
                 Log.d("BMI_ARGUMENTS", "Waist: ${viewModel.waist.value}cm, Neck: ${viewModel.neck.value}cm, Hips: ${viewModel.hips.value}cm")
-                val waist = viewModel.waist.value
+                /*val waist = viewModel.waist.value
                 val neck = viewModel.neck.value
                 val hips = viewModel.hips.value
                 val averageSteps = viewModel.averageStepsPerDay.value
@@ -90,8 +90,8 @@ class BmiAdditionalFragment : Fragment() {
                     putString("hips", hips.toString())
                     putString("avarageSteps", averageSteps)
                     putBoolean("success", success!!)
-                }
-                findNavController().navigate(R.id.action_bmiAdditionalFragment_to_bmiFragment, bundle)
+                }*/
+                findNavController().popBackStack()
             }
         }
     }
